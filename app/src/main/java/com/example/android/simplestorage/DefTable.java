@@ -36,7 +36,7 @@ public class DefTable {
     public boolean removeFromElements(int _ID, int quantity) {
         if(elementsList.containsKey(_ID)) {
             DefTableElements cur = elementsList.get(_ID);
-            if(cur.removeQuantity(quantity)) {
+            if(cur.removeQuantity(quantity) > -1) {
                 return true;
             } else {
                 return false;
@@ -58,12 +58,16 @@ public class DefTable {
         return duplicate;
     }
 
-    private int findElementsByName(String name) {
+    public int findElementsByName(String name) {
         for(Integer _ID : elementsList.keySet()) {
             DefTableElements cur = elementsList.get(_ID);
             if(cur.getName().equals(name)) return _ID;
         }
         return 0;
+    }
+
+    public DefTableElements getElements(int id) {
+        return elementsList.get(id);
     }
 
     public Integer[] getIdArray() {

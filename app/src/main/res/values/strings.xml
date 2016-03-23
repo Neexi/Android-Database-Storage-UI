@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Simple Storage</string>
+    <string name="title_activity_item_detail">Item Detail</string>
     <string name="action_settings">Settings</string>
 </resources>

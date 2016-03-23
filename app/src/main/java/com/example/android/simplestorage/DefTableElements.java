@@ -1,11 +1,17 @@
 package com.example.android.simplestorage;
 
+import android.util.Log;
+
 /**
  * Created by new on 21/03/2016.
  *  * TODO : DELETE
  * Dummy table element class
  */
 public class DefTableElements {
+    final int itemMaximumQuantity = 999;
+    final int itemMinimumQuantity = 0;
+    final int quantityError = -1;
+
     private String name;
     private int quantity;
     private String extra;
@@ -28,16 +34,21 @@ public class DefTableElements {
         return extra;
     }
 
-    public void addQuantity(int add) {
-        quantity += add;
+    public int addQuantity(int add) {
+        if(quantity + add <= itemMaximumQuantity) {
+            quantity += add;
+            return quantity;
+        } else {
+            return quantityError;
+        }
     }
 
-    public boolean removeQuantity(int remove) {
-        if(quantity > remove) {
+    public int removeQuantity(int remove) {
+        if(quantity - remove >= itemMinimumQuantity) {
             quantity -= remove;
-            return true;
+            return quantity;
         } else {
-            return false;
+            return quantityError;
         }
     }
 }
