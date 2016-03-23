@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -12,19 +13,20 @@
     tools:context="com.example.android.simplestorage.MainActivity"
     tools:showIn="@layout/activity_main">
 
-    <TableRow
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="48dp"
-        android:background="#1565C0">
+        android:background="#1565C0"
+        android:minHeight="@dimen/header_min_height"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/table_header_ID"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_weight="@integer/item_id_layout_weight"
             android:gravity="center"
-            android:padding="4dp"
+            android:padding="@dimen/table_padding_default"
             android:text="ID"
             android:textStyle="bold" />
 
@@ -32,9 +34,9 @@
             android:id="@+id/table_header_name"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="4"
+            android:layout_weight="@integer/item_name_layout_weight"
             android:gravity="center"
-            android:padding="4dp"
+            android:padding="@dimen/table_padding_default"
             android:text="Name"
             android:textStyle="bold" />
 
@@ -42,9 +44,9 @@
             android:id="@+id/table_header_quantity"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_weight="@integer/item_quantity_layout_weight"
             android:gravity="center"
-            android:padding="4dp"
+            android:padding="@dimen/table_padding_default"
             android:text="Qty"
             android:textStyle="bold" />
 
@@ -52,157 +54,35 @@
             android:id="@+id/table_header_extra"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1.5"
+            android:layout_weight="@integer/item_extra_layout_weight"
             android:gravity="center"
-            android:padding="4dp"
+            android:padding="@dimen/table_padding_default"
             android:text="Extra"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/table_header_button"
-            android:layout_width="0dp"
+            android:id="@+id/table_header_button1"
+            android:layout_width="24dp"
             android:layout_height="match_parent"
-            android:layout_weight="2"
+            android:layout_weight="0.1"
             android:gravity="center"
-            android:padding="4dp"
+            android:padding="@dimen/table_padding_default"
             android:textStyle="bold" />
-    </TableRow>
-
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#EEEEEE">
 
         <TextView
-            android:layout_width="0dp"
+            android:id="@+id/table_header_button2"
+            android:layout_width="24dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_weight="0.1"
             android:gravity="center"
-            android:padding="4dp"
-            android:text="1" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="4"
-            android:gravity="center"
-            android:padding="4dp"
-            android:text="Name1" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:padding="4dp"
-            android:text="1" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1.5"
-            android:gravity="center"
-            android:padding="4dp"
-            android:text="" />
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <ImageButton
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:background="@null"
-                android:minHeight="0dp"
-                android:minWidth="0dp"
-                android:padding="4dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/blue_plus" />
-
-            <ImageButton
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:background="@null"
-                android:minHeight="0dp"
-                android:minWidth="0dp"
-                android:padding="4dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/blue_minus" />
-        </LinearLayout>
-    </TableRow>
-
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#BDBDBD">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:padding="4dp"
-            android:text="2" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="4"
-            android:gravity="center"
-            android:padding="4dp"
-            android:text="Name2" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:padding="4dp"
-            android:text="1" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1.5"
-            android:gravity="center"
-            android:padding="4dp"
-            android:text="" />
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <ImageButton
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:background="@null"
-                android:minHeight="0dp"
-                android:minWidth="0dp"
-                android:padding="4dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/blue_plus" />
-
-            <ImageButton
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:background="@null"
-                android:minHeight="0dp"
-                android:minWidth="0dp"
-                android:padding="4dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/blue_minus" />
-        </LinearLayout>
-    </TableRow>
+            android:padding="@dimen/table_padding_default"
+            android:textStyle="bold" />
+    </LinearLayout>
 
     <ListView
+        android:id="@+id/itemListView"
         android:layout_width="match_parent"
-        android:layout_height="25dp">
+        android:layout_height="wrap_content">
     </ListView>
 
-</TableLayout>
+</LinearLayout>

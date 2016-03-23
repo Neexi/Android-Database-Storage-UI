@@ -2,6 +2,10 @@ package com.example.android.simplestorage;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 /**
  * Created by new on 21/03/2016.
@@ -60,5 +64,46 @@ public class DefTable {
             if(cur.getName().equals(name)) return _ID;
         }
         return 0;
+    }
+
+    public Integer[] getIdArray() {
+        SortedSet<Integer> sortedId = new TreeSet<>(elementsList.keySet());
+        return sortedId.toArray(new Integer[0]);
+    }
+
+    public String[] getNameArray() {
+        String[] nameArray = new String[numElements];
+        int index = 0;
+        SortedSet<Integer> sortedId = new TreeSet<>(elementsList.keySet());
+        for(Integer id : sortedId) {
+            DefTableElements ele = elementsList.get(id);
+            nameArray[index] = ele.getName();
+            index++;
+        }
+        return nameArray;
+    }
+
+    public Integer[] getQuantityArray() {
+        Integer[] quantityArray = new Integer[numElements];
+        int index = 0;
+        SortedSet<Integer> sortedId = new TreeSet<>(elementsList.keySet());
+        for(Integer id : sortedId) {
+            DefTableElements ele = elementsList.get(id);
+            quantityArray[index] = ele.getQuantity();
+            index++;
+        }
+        return quantityArray;
+    }
+
+    public String[] getExtraArray() {
+        String[] extraArray = new String[numElements];
+        int index = 0;
+        SortedSet<Integer> sortedId = new TreeSet<>(elementsList.keySet());
+        for(Integer id : sortedId) {
+            DefTableElements ele = elementsList.get(id);
+            extraArray[index] = ele.getExtra();
+            index++;
+        }
+        return extraArray;
     }
 }

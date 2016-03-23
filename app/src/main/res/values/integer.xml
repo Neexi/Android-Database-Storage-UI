@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="item_id_layout_weight">1</integer>
+    <integer name="item_name_layout_weight">4</integer>
+    <integer name="item_quantity_layout_weight">1</integer>
+    <integer name="item_extra_layout_weight">2</integer>
+    <integer name="item_name_max_length">30</integer>
+    <integer name="item_name_max_line">1</integer>
+    <integer name="item_extra_max_length">5</integer>
+    <integer name="item_extra_max_line">1</integer>
+</resources>
