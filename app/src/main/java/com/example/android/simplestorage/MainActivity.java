@@ -18,7 +18,8 @@ import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 
-    private DefTable table = new DefTable();
+    private static DefTable table;
+    private static int savedParam = 0;
     private TableAdapter tableAdapter;
 
 
@@ -28,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
         //TODO : DELETE
         // Base Hardcoded table
-        if(savedInstanceState == null) {
+        if(savedParam == 0) {
             Log.v("Message","Instance is new");
             table = new DefTable();
             table.addElements("Name1", 1, "");
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
             Log.v("Message","Instance is not new");
         }
 
+        //Prepare the Listview
         Integer[] idArray = table.getIdArray();
         Log.v("ID", Arrays.toString(idArray));
         String[] nameArray = table.getNameArray();
@@ -49,6 +51,11 @@ public class MainActivity extends AppCompatActivity {
         Log.v("Qty", Arrays.toString(quantityArray));
         String[] extraArray = table.getExtraArray();
         Log.v("Extra", Arrays.toString(extraArray));
+
+        tableAdapter = new TableAdapter(this, idArray, nameArray, quantityArray, extraArray);
+
+        ListView itemLv = (ListView) findViewById(R.id.itemListView);
+        itemLv.setAdapter(tableAdapter);
 
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -62,11 +69,6 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-
-        tableAdapter = new TableAdapter(this, idArray, nameArray, quantityArray, extraArray);
-
-        ListView itemLv = (ListView) findViewById(R.id.itemListView);
-        itemLv.setAdapter(tableAdapter);
     }
 
     @Override
@@ -94,6 +96,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Set the table state to saved, so it won't be restarted
+        savedParam = 1;
+        Log.v("Save", "State Saved");
+
+        // Always call the superclass so it can save the view hierarchy state
+        super.onSaveInstanceState(savedInstanceState);
     }
 
     public DefTable getTable() {

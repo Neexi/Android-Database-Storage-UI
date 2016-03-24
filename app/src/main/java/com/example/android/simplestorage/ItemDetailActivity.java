@@ -3,6 +3,7 @@ package com.example.android.simplestorage;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 
 /**
@@ -22,5 +23,12 @@ public class ItemDetailActivity extends AppCompatActivity {
         //TODO : FIX
         //getMenuInflater().inflate(R.menu.detail, menu);
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Log.v("DetailBack","Back button is pressed");
+        finish();
     }
 }

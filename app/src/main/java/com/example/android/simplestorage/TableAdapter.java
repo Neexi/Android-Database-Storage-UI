@@ -91,10 +91,13 @@ public class TableAdapter extends BaseAdapter {
         rowView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String itemId = getTableItemId(position).toString();
-                Intent intent = new Intent(context, ItemDetailActivity.class)
-                        .putExtra(Intent.EXTRA_TEXT, itemId);
-                context.startActivity(intent);
+                if (context instanceof MainActivity) {
+                    String itemId = getTableItemId(position).toString();
+                    Intent intent = new Intent(context, ItemDetailActivity.class)
+                            .putExtra(Intent.EXTRA_TEXT, itemId);
+                    //((MainActivity) context).finish();
+                    context.startActivity(intent);
+                }
             }
         });
         ibPlus.setOnClickListener(new View.OnClickListener() {
