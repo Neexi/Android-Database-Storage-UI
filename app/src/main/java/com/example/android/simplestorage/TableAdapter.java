@@ -54,10 +54,15 @@ public class TableAdapter extends BaseAdapter {
     private Integer getTableItemId(int position) {
         return itemId[position];
     }
-    private String getTableItemName(int position) { return itemName[position]; }
+
+    private String getTableItemName(int position) {
+        return itemName[position];
+    }
+
     private Integer getTableItemQuantity(int position) {
         return itemQuantity[position];
     }
+
     private String getTableItemExtra(int position) {
         return itemExtra[position];
     }
@@ -84,8 +89,8 @@ public class TableAdapter extends BaseAdapter {
         ImageButton ibPlus = (ImageButton) rowView.findViewById(R.id.itemPlus1);
         ImageButton ibMinus = (ImageButton) rowView.findViewById(R.id.itemMinus1);
 
-        if (itemId[position] % 2 == 0) holder.ll.setBackgroundColor(Color.parseColor("#BDBDBD"));
-        else holder.ll.setBackgroundColor(Color.parseColor("#EEEEEE"));
+        if (itemId[position] % 2 == 0) holder.ll.setBackgroundColor(Color.parseColor("#BBDEFB"));
+        else holder.ll.setBackgroundColor(Color.parseColor("#E3F2FD"));
 
         holder.tvId.setText(itemId[position].toString());
         holder.tvName.setText(itemName[position]);
@@ -97,13 +102,16 @@ public class TableAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 if (context instanceof MainActivity) {
-                    MainActivity ma = (MainActivity)context;
-                    String itemId = getTableItemId(position).toString();
+                    MainActivity ma = (MainActivity) context;
+                    Integer itemId = getTableItemId(position);
+                    DefTableEntry entry = ma.getTable().getEntry(itemId);
                     Intent intent = new Intent(context, ItemDetailActivity.class)
-                            .putExtra(ma.getResources().getString(R.string.item_id), getTableItemId(position).toString())
+                            .putExtra(ma.getResources().getString(R.string.item_id), itemId.toString())
                             .putExtra(ma.getResources().getString(R.string.item_name), getTableItemName(position))
                             .putExtra(ma.getResources().getString(R.string.item_quantity), getTableItemQuantity(position).toString())
-                            .putExtra(ma.getResources().getString(R.string.item_extra), getTableItemExtra(position));
+                            .putExtra(ma.getResources().getString(R.string.item_extra), getTableItemExtra(position))
+                            .putExtra(ma.getResources().getString(R.string.item_is_match), String.valueOf(entry.getIsMatch()))
+                            .putExtra(ma.getResources().getString(R.string.item_full), entry.getFull());
                     context.startActivity(intent);
                 }
             }
@@ -114,7 +122,7 @@ public class TableAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 if (context instanceof MainActivity) {
-                    DefTableElements curEle = ((MainActivity) context).getTable().getElements(itemId[position]);
+                    DefTableEntry curEle = ((MainActivity) context).getTable().getEntry(itemId[position]);
                     int newQuantity = curEle.addQuantity(1);
                     if (newQuantity != context.getResources().getInteger(R.integer.quantity_error)) {
                         itemQuantity[position] = newQuantity;
@@ -130,7 +138,7 @@ public class TableAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 if (context instanceof MainActivity) {
-                    DefTableElements curEle = ((MainActivity) context).getTable().getElements(itemId[position]);
+                    DefTableEntry curEle = ((MainActivity) context).getTable().getEntry(itemId[position]);
                     int newQuantity = curEle.removeQuantity(1);
                     if (newQuantity != context.getResources().getInteger(R.integer.quantity_error)) {
                         itemQuantity[position] = newQuantity;

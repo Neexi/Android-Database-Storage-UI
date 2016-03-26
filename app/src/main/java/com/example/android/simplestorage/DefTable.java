@@ -1,9 +1,6 @@
 package com.example.android.simplestorage;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -14,7 +11,7 @@ import java.util.TreeSet;
  */
 public class DefTable {
     private int currentID;
-    private HashMap<Integer, DefTableElements> elementsList;
+    private HashMap<Integer, DefTableEntry> elementsList;
     private int numElements;
 
     public DefTable() {
@@ -23,9 +20,15 @@ public class DefTable {
         numElements = 0;
     }
 
-    public boolean addToElements(int _ID, int quantity) {
+    /**
+     * Add certain number of item into entry based on entry ID
+     * @param _ID
+     * @param quantity
+     * @return
+     */
+    public boolean addToEntry(int _ID, int quantity) {
         if(elementsList.containsKey(_ID)) {
-            DefTableElements cur = elementsList.get(_ID);
+            DefTableEntry cur = elementsList.get(_ID);
             cur.addQuantity(quantity);
             return true;
         } else {
@@ -33,9 +36,15 @@ public class DefTable {
         }
     }
 
-    public boolean removeFromElements(int _ID, int quantity) {
+    /**
+     * Remove certain number of item into entry based on entry ID
+     * @param _ID
+     * @param quantity
+     * @return
+     */
+    public boolean removeFromEntry(int _ID, int quantity) {
         if(elementsList.containsKey(_ID)) {
-            DefTableElements cur = elementsList.get(_ID);
+            DefTableEntry cur = elementsList.get(_ID);
             if(cur.removeQuantity(quantity) > -1) {
                 return true;
             } else {
@@ -46,10 +55,17 @@ public class DefTable {
         }
     }
 
-    public int addElements(String name, int quantity, String extra) {
-        int duplicate = findElementsByName(name);
+    /**
+     * Add an entry to table
+     * @param name
+     * @param quantity
+     * @param extra
+     * @return
+     */
+    public int addEntry(String name, int quantity, String extra) {
+        int duplicate = findEntryByName(name);
         if(duplicate == 0) {
-            elementsList.put(currentID, new DefTableElements(name, quantity, extra));
+            elementsList.put(currentID, new DefTableEntry(currentID, name, quantity, extra));
             currentID++;
             numElements++;
         } else {
@@ -58,18 +74,50 @@ public class DefTable {
         return duplicate;
     }
 
-    public int findElementsByName(String name) {
+    /**
+     * Add an entry to table
+     * @param name
+     * @param quantity
+     * @param extra
+     * @param fullMatchExtra
+     * @param full
+     * @return
+     */
+    public int addEntry(String name, int quantity, String extra, boolean fullMatchExtra, String full) {
+        int duplicate = findEntryByName(name);
+        if(duplicate == 0) {
+            elementsList.put(currentID, new DefTableEntry(currentID, name, quantity, extra, fullMatchExtra, full));
+            currentID++;
+            numElements++;
+        } else {
+            elementsList.get(duplicate).addQuantity(quantity);
+        }
+        return duplicate;
+    }
+
+    /**
+     * Find entry from table by the item name
+     * @param name
+     * @return
+     */
+    public int findEntryByName(String name) {
         for(Integer _ID : elementsList.keySet()) {
-            DefTableElements cur = elementsList.get(_ID);
+            DefTableEntry cur = elementsList.get(_ID);
             if(cur.getName().equals(name)) return _ID;
         }
         return 0;
     }
 
-    public DefTableElements getElements(int id) {
+    /**
+     * Get entry from table by ID
+     * @param id
+     * @return
+     */
+    public DefTableEntry getEntry(int id) {
         return elementsList.get(id);
     }
 
+    //get array function for table adapter
     public Integer[] getIdArray() {
         SortedSet<Integer> sortedId = new TreeSet<>(elementsList.keySet());
         return sortedId.toArray(new Integer[0]);
@@ -80,7 +128,7 @@ public class DefTable {
         int index = 0;
         SortedSet<Integer> sortedId = new TreeSet<>(elementsList.keySet());
         for(Integer id : sortedId) {
-            DefTableElements ele = elementsList.get(id);
+            DefTableEntry ele = elementsList.get(id);
             nameArray[index] = ele.getName();
             index++;
         }
@@ -92,7 +140,7 @@ public class DefTable {
         int index = 0;
         SortedSet<Integer> sortedId = new TreeSet<>(elementsList.keySet());
         for(Integer id : sortedId) {
-            DefTableElements ele = elementsList.get(id);
+            DefTableEntry ele = elementsList.get(id);
             quantityArray[index] = ele.getQuantity();
             index++;
         }
@@ -104,7 +152,7 @@ public class DefTable {
         int index = 0;
         SortedSet<Integer> sortedId = new TreeSet<>(elementsList.keySet());
         for(Integer id : sortedId) {
-            DefTableElements ele = elementsList.get(id);
+            DefTableEntry ele = elementsList.get(id);
             extraArray[index] = ele.getExtra();
             index++;
         }

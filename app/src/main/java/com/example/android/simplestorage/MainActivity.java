@@ -9,10 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.AdapterView;
-import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.Arrays;
 
@@ -36,12 +33,12 @@ public class MainActivity extends AppCompatActivity {
         if(savedParam == 0) {
             Log.v("Message","Instance is new");
             table = new DefTable();
-            table.addElements("Name1", 1, "");
-            table.addElements("name2name2name2name2name2name2name2name2name2name2name2name2name2", 5, "extra");
-            table.addElements("Name3", 2, "verylongextra");
-            table.addElements("name4", 8, "extra");
-            table.addElements("Name5", 10, "verylongextraverylongextra");
-            table.addElements("name6", 999, "extra");
+            table.addEntry("Name1", 1, "");
+            table.addEntry("name2name2name2name2name2name2name2name2name2name2name2name2name2", 5, "extra");
+            table.addEntry("Name3", 2, "verylongextra");
+            table.addEntry("name4", 8, "extra");
+            table.addEntry("Name5", 10, "verylongextraverylongextra");
+            table.addEntry("name6", 999, "extra");
         } else {
             Log.v("Message","Instance is not new");
         }

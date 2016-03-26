@@ -19,11 +19,13 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/activity_vertical_margin"
             android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="@dimen/item_detail_image_size"
                 android:layout_height="@dimen/item_detail_image_size"
+                android:background="@drawable/back"
                 android:padding="@dimen/table_padding_default"
                 android:src="@drawable/image_not_found" />
 
@@ -46,6 +48,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
+                    android:maxLines="4"
                     android:padding="@dimen/table_padding_default"
                     android:text="@string/lorem_ipsum_16"
                     android:textColor="@color/colorPrimary"
@@ -66,7 +69,7 @@
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/item_detail_double_field_height"
+                    android:layout_height="@dimen/item_detail_single_field_height"
                     android:layout_margin="@dimen/table_padding_default"
                     android:gravity="center_vertical"
                     android:text="@string/item_name"
@@ -105,14 +108,14 @@
                 <TextView
                     android:id="@+id/itemDetailName"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/item_detail_double_field_height"
+                    android:layout_height="@dimen/item_detail_single_field_height"
                     android:layout_margin="@dimen/table_margin_default"
-                    android:background="@drawable/back"
                     android:gravity="center_vertical"
                     android:maxLength="@integer/item_name_max_length"
                     android:maxLines="@integer/item_name_max_line_detail"
                     android:padding="@dimen/table_padding_default"
                     android:text="ThisIsASampleText"
+                    android:textColor="@color/black"
                     android:textSize="@dimen/item_detail_default_text_size" />
 
                 <TextView
@@ -120,9 +123,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/item_detail_single_field_height"
                     android:layout_margin="@dimen/table_margin_default"
-                    android:background="@drawable/back"
                     android:gravity="center_vertical"
                     android:padding="@dimen/table_padding_default"
+                    android:textColor="@color/black"
                     android:textSize="@dimen/item_detail_default_text_size" />
 
                 <TextView
@@ -130,24 +133,27 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/item_detail_single_field_height"
                     android:layout_margin="@dimen/table_margin_default"
-                    android:background="@drawable/back"
                     android:gravity="center_vertical"
                     android:maxLength="@integer/item_extra_max_length"
                     android:padding="@dimen/table_padding_default"
+                    android:textColor="@color/black"
                     android:textSize="@dimen/item_detail_default_text_size" />
 
-                <TextView
-                    android:id="@+id/itemDetailExtraFull"
+                <ScrollView
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/item_detail_quadruple_field_height"
                     android:layout_margin="@dimen/table_margin_default"
-                    android:background="@drawable/back"
-                    android:gravity="center_vertical"
-                    android:paddingBottom="@dimen/table_padding_default"
-                    android:paddingLeft="@dimen/table_padding_default"
-                    android:paddingTop="@dimen/table_padding_default"
-                    android:text="@string/lorem_ipsum_32"
-                    android:textSize="@dimen/item_detail_default_text_size" />
+                    android:background="@drawable/back">
+
+                    <TextView
+                        android:id="@+id/itemDetailExtraFull"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="@dimen/table_padding_default"
+                        android:text="@string/lorem_ipsum_32"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/item_detail_default_text_size" />
+                </ScrollView>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -163,6 +169,7 @@
                         android:textSize="@dimen/item_detail_default_text_size" />
 
                     <CheckBox
+                        android:id="@+id/itemDetailIsMatch"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="right"
@@ -181,10 +188,10 @@
 
                 <ImageButton
                     android:layout_width="wrap_content"
-                    android:layout_height="@dimen/item_detail_double_field_height"
+                    android:layout_height="@dimen/item_detail_single_field_height"
                     android:layout_gravity="center_vertical"
                     android:layout_margin="@dimen/table_margin_default"
-                    android:backgroundTint="#FFFFFF"
+                    android:background="@android:color/transparent"
                     android:src="@drawable/ic_edit_24dp"
                     android:tint="?attr/colorPrimary" />
 
@@ -193,7 +200,7 @@
                     android:layout_height="@dimen/item_detail_single_field_height"
                     android:layout_gravity="center_vertical"
                     android:layout_margin="@dimen/table_margin_default"
-                    android:backgroundTint="#FFFFFF"
+                    android:background="@android:color/transparent"
                     android:src="@drawable/ic_edit_24dp"
                     android:tint="?attr/colorPrimary" />
 
@@ -202,7 +209,7 @@
                     android:layout_height="@dimen/item_detail_single_field_height"
                     android:layout_gravity="center_vertical"
                     android:layout_margin="@dimen/table_margin_default"
-                    android:backgroundTint="#FFFFFF"
+                    android:background="@android:color/transparent"
                     android:src="@drawable/ic_edit_24dp"
                     android:tint="?attr/colorPrimary" />
 
