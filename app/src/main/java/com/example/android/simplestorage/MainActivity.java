@@ -27,6 +27,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setContentView(R.layout.activity_main);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         //TODO : DELETE
         // Base Hardcoded table
         if(savedParam == 0) {
@@ -42,6 +46,11 @@ public class MainActivity extends AppCompatActivity {
             Log.v("Message","Instance is not new");
         }
 
+        /**
+        if(getIntent() != null) {
+            Log.v("MAIntent","Intent is not null");
+        }**/
+
         //Prepare the Listview
         Integer[] idArray = table.getIdArray();
         Log.v("ID", Arrays.toString(idArray));
@@ -56,10 +65,6 @@ public class MainActivity extends AppCompatActivity {
 
         ListView itemLv = (ListView) findViewById(R.id.itemListView);
         itemLv.setAdapter(tableAdapter);
-
-        setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

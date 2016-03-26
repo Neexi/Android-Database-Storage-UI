@@ -5,6 +5,15 @@
     <dimen name="button_size">24dp</dimen>
     <dimen name="header_min_height">48dp</dimen>
     <dimen name="table_padding_default">4dp</dimen>
+    <dimen name="table_margin_default">4dp</dimen>
     <dimen name="item_min_height">32dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+
+    <!-- For item detail. -->
+    <dimen name="item_detail_image_size">128dp</dimen>
+    <dimen name="item_detail_header_text_size">24dp</dimen>
+    <dimen name="item_detail_default_text_size">16dp</dimen>
+    <dimen name="item_detail_single_field_height">40dp</dimen>
+    <dimen name="item_detail_double_field_height">80dp</dimen>
+    <dimen name="item_detail_quadruple_field_height">160dp</dimen>
 </resources>

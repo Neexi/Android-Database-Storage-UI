@@ -51,12 +51,15 @@ public class TableAdapter extends BaseAdapter {
         return position;
     }
 
-    public Integer getItemQuantity(int position) {
+    private Integer getTableItemId(int position) {
+        return itemId[position];
+    }
+    private String getTableItemName(int position) { return itemName[position]; }
+    private Integer getTableItemQuantity(int position) {
         return itemQuantity[position];
     }
-
-    public Integer getTableItemId(int position) {
-        return itemId[position];
+    private String getTableItemExtra(int position) {
+        return itemExtra[position];
     }
 
 
@@ -88,18 +91,25 @@ public class TableAdapter extends BaseAdapter {
         holder.tvName.setText(itemName[position]);
         holder.tvQuantity.setText(itemQuantity[position].toString());
         holder.tvExtra.setText(itemExtra[position]);
+
+        //For Item Detail Page
         rowView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (context instanceof MainActivity) {
+                    MainActivity ma = (MainActivity)context;
                     String itemId = getTableItemId(position).toString();
                     Intent intent = new Intent(context, ItemDetailActivity.class)
-                            .putExtra(Intent.EXTRA_TEXT, itemId);
-                    //((MainActivity) context).finish();
+                            .putExtra(ma.getResources().getString(R.string.item_id), getTableItemId(position).toString())
+                            .putExtra(ma.getResources().getString(R.string.item_name), getTableItemName(position))
+                            .putExtra(ma.getResources().getString(R.string.item_quantity), getTableItemQuantity(position).toString())
+                            .putExtra(ma.getResources().getString(R.string.item_extra), getTableItemExtra(position));
                     context.startActivity(intent);
                 }
             }
         });
+
+        //Button for single addition to item quantity
         ibPlus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -115,6 +125,7 @@ public class TableAdapter extends BaseAdapter {
             }
         });
 
+        //Button for single subtraction to item quantity
         ibMinus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
