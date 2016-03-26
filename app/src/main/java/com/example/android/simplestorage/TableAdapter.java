@@ -18,21 +18,21 @@ import java.util.Arrays;
  * Created by new on 22/03/2016.
  */
 public class TableAdapter extends BaseAdapter {
-    Context context;
+    MainTableFragment mtf;
     private Integer[] itemId;
     private String[] itemName;
     private Integer[] itemQuantity;
     private String[] itemExtra;
     private static LayoutInflater inflater = null;
 
-    public TableAdapter(Context context, Integer[] itemId, String[] itemName, Integer[] itemQuantity, String[] itemExtra) {
+    public TableAdapter(MainTableFragment mtf, Integer[] itemId, String[] itemName, Integer[] itemQuantity, String[] itemExtra) {
         // TODO Auto-generated constructor stub
-        this.context = context;
+        this.mtf = mtf;
         this.itemId = itemId;
         this.itemName = itemName;
         this.itemQuantity = itemQuantity;
         this.itemExtra = itemExtra;
-        inflater = (LayoutInflater) context.
+        inflater = (LayoutInflater) mtf.getContext().
                 getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -101,19 +101,16 @@ public class TableAdapter extends BaseAdapter {
         rowView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (context instanceof MainActivity) {
-                    MainActivity ma = (MainActivity) context;
-                    Integer itemId = getTableItemId(position);
-                    DefTableEntry entry = ma.getTable().getEntry(itemId);
-                    Intent intent = new Intent(context, ItemDetailActivity.class)
-                            .putExtra(ma.getResources().getString(R.string.item_id), itemId.toString())
-                            .putExtra(ma.getResources().getString(R.string.item_name), getTableItemName(position))
-                            .putExtra(ma.getResources().getString(R.string.item_quantity), getTableItemQuantity(position).toString())
-                            .putExtra(ma.getResources().getString(R.string.item_extra), getTableItemExtra(position))
-                            .putExtra(ma.getResources().getString(R.string.item_is_match), String.valueOf(entry.getIsMatch()))
-                            .putExtra(ma.getResources().getString(R.string.item_full), entry.getFull());
-                    context.startActivity(intent);
-                }
+                Integer itemId = getTableItemId(position);
+                DefTableEntry entry = mtf.getTable().getEntry(itemId);
+                Intent intent = new Intent(mtf.getActivity(), ItemDetailActivity.class)
+                        .putExtra(mtf.getResources().getString(R.string.item_id), itemId.toString())
+                        .putExtra(mtf.getResources().getString(R.string.item_name), getTableItemName(position))
+                        .putExtra(mtf.getResources().getString(R.string.item_quantity), getTableItemQuantity(position).toString())
+                        .putExtra(mtf.getResources().getString(R.string.item_extra), getTableItemExtra(position))
+                        .putExtra(mtf.getResources().getString(R.string.item_is_match), String.valueOf(entry.getIsMatch()))
+                        .putExtra(mtf.getResources().getString(R.string.item_full), entry.getFull());
+                mtf.startActivity(intent);
             }
         });
 
@@ -121,14 +118,12 @@ public class TableAdapter extends BaseAdapter {
         ibPlus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (context instanceof MainActivity) {
-                    DefTableEntry curEle = ((MainActivity) context).getTable().getEntry(itemId[position]);
-                    int newQuantity = curEle.addQuantity(1);
-                    if (newQuantity != context.getResources().getInteger(R.integer.quantity_error)) {
-                        itemQuantity[position] = newQuantity;
-                        Log.v("Qty", Arrays.toString(((MainActivity) context).getTable().getQuantityArray()));
-                        holder.tvQuantity.setText(itemQuantity[position].toString());
-                    }
+                DefTableEntry curEle = mtf.getTable().getEntry(itemId[position]);
+                int newQuantity = curEle.addQuantity(1);
+                if (newQuantity != mtf.getResources().getInteger(R.integer.quantity_error)) {
+                    itemQuantity[position] = newQuantity;
+                    Log.v("Qty", Arrays.toString(mtf.getTable().getQuantityArray()));
+                    holder.tvQuantity.setText(itemQuantity[position].toString());
                 }
             }
         });
@@ -137,14 +132,12 @@ public class TableAdapter extends BaseAdapter {
         ibMinus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (context instanceof MainActivity) {
-                    DefTableEntry curEle = ((MainActivity) context).getTable().getEntry(itemId[position]);
-                    int newQuantity = curEle.removeQuantity(1);
-                    if (newQuantity != context.getResources().getInteger(R.integer.quantity_error)) {
-                        itemQuantity[position] = newQuantity;
-                        Log.v("Qty", Arrays.toString(((MainActivity) context).getTable().getQuantityArray()));
-                        holder.tvQuantity.setText(itemQuantity[position].toString());
-                    }
+                DefTableEntry curEle = mtf.getTable().getEntry(itemId[position]);
+                int newQuantity = curEle.removeQuantity(1);
+                if (newQuantity != mtf.getResources().getInteger(R.integer.quantity_error)) {
+                    itemQuantity[position] = newQuantity;
+                    Log.v("Qty", Arrays.toString(mtf.getTable().getQuantityArray()));
+                    holder.tvQuantity.setText(itemQuantity[position].toString());
                 }
             }
         });
