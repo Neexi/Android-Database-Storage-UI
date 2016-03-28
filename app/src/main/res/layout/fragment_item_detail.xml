@@ -155,15 +155,17 @@
                     android:textSize="@dimen/item_detail_default_text_size" />
 
                 <ScrollView
+                    android:id="@+id/itemDetailFullContainer"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/item_detail_quadruple_field_height"
                     android:layout_margin="@dimen/table_margin_default"
                     android:background="@drawable/back_light">
 
-                    <TextView
+                    <EditText
                         android:id="@+id/itemDetailExtraFull"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:background="@null"
                         android:padding="@dimen/table_padding_default"
                         android:text="@string/lorem_ipsum_32"
                         android:textColor="@color/grey"
@@ -224,6 +226,16 @@
 
                 <ImageButton
                     android:id="@+id/itemDetailExtraEditButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/item_detail_single_field_height"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/table_margin_default"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_edit_24dp"
+                    android:tint="?attr/colorPrimary" />
+
+                <ImageButton
+                    android:id="@+id/itemDetailFullEditButton"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/item_detail_single_field_height"
                     android:layout_gravity="center_vertical"
