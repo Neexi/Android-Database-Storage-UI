@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatCheckBox;
 import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -73,6 +74,7 @@ public class ItemDetailActivity extends AppCompatActivity {
         private String full;
 
         private Boolean fullMatchesExtra;
+        private Boolean oneOnEdit;
         private Boolean nameOnEdit;
         private Boolean extraOnEdit;
         private Boolean fullOnEdit;
@@ -125,6 +127,7 @@ public class ItemDetailActivity extends AppCompatActivity {
             this.full = full;
 
             this.fullMatchesExtra = Boolean.valueOf(isMatch);
+            this.oneOnEdit = false;
             this.nameOnEdit = false;
             this.extraOnEdit = false;
             this.fullOnEdit = false;
@@ -172,40 +175,30 @@ public class ItemDetailActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     if (!nameOnEdit) {
-                        if (extraOnEdit) {
-                            extraOnEdit = false;
-                            etExtra.clearFocus();
-                            etExtra.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.back_light));
-                            etExtra.setInputType(InputType.TYPE_NULL);
-                            etExtra.setTextColor(ContextCompat.getColor(getContext(), R.color.grey));
-                            imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
-                            ibExtra.setImageResource(R.drawable.ic_edit_24dp);
+                        if (!oneOnEdit) {
+                            oneOnEdit = !oneOnEdit;
+                            nameOnEdit = !nameOnEdit;
+                            disableAllEditButton();
+                            etName.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.back));
+                            etName.setInputType(InputType.TYPE_CLASS_TEXT);
+                            etName.requestFocus();
+                            etName.setSelection(etName.getText().length());
+                            etName.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
+                            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+                            ibName.setImageResource(R.drawable.ic_done_24dp);
                         }
-                        if (fullOnEdit) {
-                            fullOnEdit = false;
-                            etFull.clearFocus();
-                            fullContainer.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.back_light));
-                            etFull.setInputType(InputType.TYPE_NULL);
-                            etFull.setTextColor(ContextCompat.getColor(getContext(), R.color.grey));
-                            imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
-                            ibFull.setImageResource(R.drawable.ic_edit_24dp);
-                        }
-                        etName.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.back));
-                        etName.setInputType(InputType.TYPE_CLASS_TEXT);
-                        etName.requestFocus();
-                        etName.setSelection(etName.getText().length());
-                        etName.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
-                        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
-                        ibName.setImageResource(R.drawable.ic_done_24dp);
                     } else {
+                        name = etName.getText().toString();
                         etName.clearFocus();
                         etName.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.back_light));
                         etName.setInputType(InputType.TYPE_NULL);
                         etName.setTextColor(ContextCompat.getColor(getContext(), R.color.grey));
                         imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
                         ibName.setImageResource(R.drawable.ic_edit_24dp);
+                        enableAllEditButton();
+                        nameOnEdit = !nameOnEdit;
+                        oneOnEdit = !oneOnEdit;
                     }
-                    nameOnEdit = !nameOnEdit;
                 }
             });
 
@@ -214,40 +207,34 @@ public class ItemDetailActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     if (!extraOnEdit) {
-                        if (nameOnEdit) {
-                            nameOnEdit = false;
-                            etName.clearFocus();
-                            etName.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.back_light));
-                            etName.setInputType(InputType.TYPE_NULL);
-                            etName.setTextColor(ContextCompat.getColor(getContext(), R.color.grey));
-                            imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
-                            ibName.setImageResource(R.drawable.ic_edit_24dp);
+                        if (!oneOnEdit) {
+                            oneOnEdit = !oneOnEdit;
+                            extraOnEdit = !extraOnEdit;
+                            disableAllEditButton();
+                            etExtra.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.back));
+                            etExtra.setInputType(InputType.TYPE_CLASS_TEXT);
+                            etExtra.requestFocus();
+                            etExtra.setSelection(etExtra.getText().length());
+                            etExtra.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
+                            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+                            ibExtra.setImageResource(R.drawable.ic_done_24dp);
                         }
-                        if (fullOnEdit) {
-                            fullOnEdit = false;
-                            etFull.clearFocus();
-                            fullContainer.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.back_light));
-                            etFull.setInputType(InputType.TYPE_NULL);
-                            etFull.setTextColor(ContextCompat.getColor(getContext(), R.color.grey));
-                            imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
-                            ibFull.setImageResource(R.drawable.ic_edit_24dp);
-                        }
-                        etExtra.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.back));
-                        etExtra.setInputType(InputType.TYPE_CLASS_TEXT);
-                        etExtra.requestFocus();
-                        etExtra.setSelection(etExtra.getText().length());
-                        etExtra.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
-                        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
-                        ibExtra.setImageResource(R.drawable.ic_done_24dp);
                     } else {
+                        extra = etExtra.getText().toString();
+                        if(fullMatchesExtra) {
+                            full = extra;
+                            etFull.setText(full);
+                        }
                         etExtra.clearFocus();
                         etExtra.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.back_light));
                         etExtra.setInputType(InputType.TYPE_NULL);
                         etExtra.setTextColor(ContextCompat.getColor(getContext(), R.color.grey));
                         imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
                         ibExtra.setImageResource(R.drawable.ic_edit_24dp);
+                        enableAllEditButton();
+                        extraOnEdit = !extraOnEdit;
+                        oneOnEdit = !oneOnEdit;
                     }
-                    extraOnEdit = !extraOnEdit;
                 }
             });
 
@@ -256,40 +243,30 @@ public class ItemDetailActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     if (!fullMatchesExtra) {
                         if (!fullOnEdit) {
-                            if (nameOnEdit) {
-                                nameOnEdit = false;
-                                etName.clearFocus();
-                                etName.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.back_light));
-                                etName.setInputType(InputType.TYPE_NULL);
-                                etName.setTextColor(ContextCompat.getColor(getContext(), R.color.grey));
-                                imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
-                                ibName.setImageResource(R.drawable.ic_edit_24dp);
+                            if (!oneOnEdit) {
+                                oneOnEdit = !oneOnEdit;
+                                fullOnEdit = !fullOnEdit;
+                                disableAllEditButton();
+                                fullContainer.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.back));
+                                etFull.setInputType(InputType.TYPE_CLASS_TEXT);
+                                etFull.requestFocus();
+                                etFull.setSelection(etFull.getText().length());
+                                etFull.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
+                                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+                                ibFull.setImageResource(R.drawable.ic_done_24dp);
                             }
-                            if (extraOnEdit) {
-                                extraOnEdit = false;
-                                etExtra.clearFocus();
-                                etExtra.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.back_light));
-                                etExtra.setInputType(InputType.TYPE_NULL);
-                                etExtra.setTextColor(ContextCompat.getColor(getContext(), R.color.grey));
-                                imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
-                                ibExtra.setImageResource(R.drawable.ic_edit_24dp);
-                            }
-                            fullContainer.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.back));
-                            etFull.setInputType(InputType.TYPE_CLASS_TEXT);
-                            etFull.requestFocus();
-                            etFull.setSelection(etFull.getText().length());
-                            etFull.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
-                            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
-                            ibFull.setImageResource(R.drawable.ic_done_24dp);
                         } else {
+                            full = etFull.getText().toString();
                             etFull.clearFocus();
                             fullContainer.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.back_light));
                             etFull.setInputType(InputType.TYPE_NULL);
                             etFull.setTextColor(ContextCompat.getColor(getContext(), R.color.grey));
                             imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
                             ibFull.setImageResource(R.drawable.ic_edit_24dp);
+                            enableAllEditButton();
+                            fullOnEdit = !fullOnEdit;
+                            oneOnEdit = !oneOnEdit;
                         }
-                        fullOnEdit = !fullOnEdit;
                     }
                 }
             });
@@ -298,67 +275,69 @@ public class ItemDetailActivity extends AppCompatActivity {
             ibQuantity.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    final Dialog d = new Dialog(getContext());
-                    d.setContentView(R.layout.dialog_item_detail);
-                    d.setTitle("NumberPicker");
-                    TextView curQuantity = (TextView) d.findViewById(R.id.itemDetailDialogQuantity);
-                    curQuantity.setText(quantity.toString());
-                    ImageButton cancelButton = (ImageButton) d.findViewById(R.id.itemDetailDialogCancel);
-                    Button removeButton = (Button) d.findViewById(R.id.itemDetailDialogRemove);
-                    Button addButton = (Button) d.findViewById(R.id.itemDetailDialogAdd);
-                    final NumberPicker[] np = new NumberPicker[3];
-                    np[0] = (NumberPicker) d.findViewById(R.id.itemDetailNumberPicker1);
-                    np[1] = (NumberPicker) d.findViewById(R.id.itemDetailNumberPicker2);
-                    np[2] = (NumberPicker) d.findViewById(R.id.itemDetailNumberPicker3);
-                    for (int i = 0; i < 3; i++) {
-                        np[i].setMaxValue(9);
-                        np[i].setMinValue(0);
-                        setDividerColor(np[i], ContextCompat.getColor(getContext(), R.color.colorPrimaryLight));
-                        np[i].setWrapSelectorWheel(false);
-                    }
-                    np[2].setValue(1);
+                    if (!oneOnEdit) {
+                        final Dialog d = new Dialog(getContext());
+                        d.setContentView(R.layout.dialog_item_detail);
+                        d.setTitle("NumberPicker");
+                        TextView curQuantity = (TextView) d.findViewById(R.id.itemDetailDialogQuantity);
+                        curQuantity.setText(quantity.toString());
+                        ImageButton cancelButton = (ImageButton) d.findViewById(R.id.itemDetailDialogCancel);
+                        Button removeButton = (Button) d.findViewById(R.id.itemDetailDialogRemove);
+                        Button addButton = (Button) d.findViewById(R.id.itemDetailDialogAdd);
+                        final NumberPicker[] np = new NumberPicker[3];
+                        np[0] = (NumberPicker) d.findViewById(R.id.itemDetailNumberPicker1);
+                        np[1] = (NumberPicker) d.findViewById(R.id.itemDetailNumberPicker2);
+                        np[2] = (NumberPicker) d.findViewById(R.id.itemDetailNumberPicker3);
+                        for (int i = 0; i < 3; i++) {
+                            np[i].setMaxValue(9);
+                            np[i].setMinValue(0);
+                            setDividerColor(np[i], ContextCompat.getColor(getContext(), R.color.colorPrimaryLight));
+                            np[i].setWrapSelectorWheel(false);
+                        }
+                        np[2].setValue(1);
 
-                    cancelButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            d.dismiss();
-                        }
-                    });
-                    removeButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Integer curNpVal = getNumberPickerValue(np);
-                            Log.v("curVal", curNpVal.toString());
-                            if (quantity - curNpVal >= getResources().getInteger(R.integer.item_minimum_quantity)) {
-                                quantity -= curNpVal;
-                                tvQuantity.setText(quantity.toString());
+                        cancelButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
                                 d.dismiss();
-                            } else {
-                                Toast toast = Toast.makeText(getContext(),
-                                        "Item quantity cannot be less than " + getResources().getInteger(R.integer.item_minimum_quantity),
-                                        Toast.LENGTH_SHORT);
-                                toast.show();
                             }
-                        }
-                    });
-                    addButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Integer curNpVal = getNumberPickerValue(np);
-                            Log.v("curVal", curNpVal.toString());
-                            if (quantity + curNpVal <= getResources().getInteger(R.integer.item_maximum_quantity)) {
-                                quantity += curNpVal;
-                                tvQuantity.setText(quantity.toString());
-                                d.dismiss();
-                            } else {
-                                Toast toast = Toast.makeText(getContext(),
-                                        "Item quantity cannot be more than " + getResources().getInteger(R.integer.item_maximum_quantity),
-                                        Toast.LENGTH_SHORT);
-                                toast.show();
+                        });
+                        removeButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Integer curNpVal = getNumberPickerValue(np);
+                                Log.v("curVal", curNpVal.toString());
+                                if (quantity - curNpVal >= getResources().getInteger(R.integer.item_minimum_quantity)) {
+                                    quantity -= curNpVal;
+                                    tvQuantity.setText(quantity.toString());
+                                    d.dismiss();
+                                } else {
+                                    Toast toast = Toast.makeText(getContext(),
+                                            "Item quantity cannot be less than " + getResources().getInteger(R.integer.item_minimum_quantity),
+                                            Toast.LENGTH_SHORT);
+                                    toast.show();
+                                }
                             }
-                        }
-                    });
-                    d.show();
+                        });
+                        addButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Integer curNpVal = getNumberPickerValue(np);
+                                Log.v("curVal", curNpVal.toString());
+                                if (quantity + curNpVal <= getResources().getInteger(R.integer.item_maximum_quantity)) {
+                                    quantity += curNpVal;
+                                    tvQuantity.setText(quantity.toString());
+                                    d.dismiss();
+                                } else {
+                                    Toast toast = Toast.makeText(getContext(),
+                                            "Item quantity cannot be more than " + getResources().getInteger(R.integer.item_maximum_quantity),
+                                            Toast.LENGTH_SHORT);
+                                    toast.show();
+                                }
+                            }
+                        });
+                        d.show();
+                    }
                 }
             });
 
@@ -409,6 +388,34 @@ public class ItemDetailActivity extends AppCompatActivity {
                     break;
                 }
             }
+        }
+
+        private void enableAllEditButton() {
+            ibName.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+            ibQuantity.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+            ibExtra.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+            if(!fullMatchesExtra) ibFull.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+            etName.setFocusableInTouchMode(true);
+            etExtra.setFocusableInTouchMode(true);
+            etFull.setFocusableInTouchMode(true);
+            isMatchCB.setClickable(true);
+        }
+
+        private void disableAllEditButton() {
+            if(!nameOnEdit) {
+                ibName.setColorFilter(ContextCompat.getColor(getContext(), R.color.greyLight));
+                etName.setFocusable(false);
+            }
+            ibQuantity.setColorFilter(ContextCompat.getColor(getContext(), R.color.greyLight));
+            if(!extraOnEdit) {
+                ibExtra.setColorFilter(ContextCompat.getColor(getContext(), R.color.greyLight));
+                etExtra.setFocusable(false);
+            }
+            if(!fullOnEdit) {
+                ibFull.setColorFilter(ContextCompat.getColor(getContext(), R.color.greyLight));
+                etFull.setFocusable(false);
+            }
+            isMatchCB.setClickable(false);
         }
 
         private String formatID(Integer _ID) {
