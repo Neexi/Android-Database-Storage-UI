@@ -9,6 +9,9 @@
     <string name="item_is_match">Is Match</string>
     <string name="item_full">Full</string>
     <string name="item_detail_save">Save</string>
+    <string name="item_detail_add">Add</string>
+    <string name="item_detail_remove">Remove</string>
+    <string name="item_detail_current_quantity">Current Quantity :</string>
     <string name="item_description_match_extra">Match Extra</string>
 
     <!-- Extra Stuff -->

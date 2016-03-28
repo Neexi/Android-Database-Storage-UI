@@ -75,13 +75,6 @@ public class MainTableFragment extends Fragment {
         super.onSaveInstanceState(savedInstanceState);
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
-    }
-
     public DefTable getTable() {
         return table;
     }

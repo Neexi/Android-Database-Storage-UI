@@ -1,7 +1,10 @@
 package com.example.android.simplestorage;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.drawable.ColorDrawable;
 import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,10 +17,15 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.NumberPicker;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 /**
  * Created by new on 23/03/2016.
@@ -44,10 +52,10 @@ public class ItemDetailActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed() {
+    public void onDestroy() {
         int count = getFragmentManager().getBackStackEntryCount();
         if (count == 0) {
-            super.onBackPressed();
+            super.onDestroy();
             //additional code
         } else {
             getFragmentManager().popBackStack();
@@ -68,6 +76,19 @@ public class ItemDetailActivity extends AppCompatActivity {
         private Boolean fullMatchesExtra;
         private Boolean nameOnEdit;
         private Boolean extraOnEdit;
+
+        //All view
+        TextView tvId;
+        EditText etName;
+        TextView tvQuantity;
+        EditText etExtra;
+        TextView tvFull;
+
+        CheckBox isMatchCB;
+
+        ImageButton ibName;
+        ImageButton ibExtra;
+        ImageButton ibQuantity;
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -107,58 +128,62 @@ public class ItemDetailActivity extends AppCompatActivity {
         }
 
         private void setView(View rootView) {
-            TextView idView = (TextView) rootView.findViewById(R.id.itemDetailId);
-            TextView nameView = (TextView) rootView.findViewById(R.id.itemDetailName);
-            TextView quantityView = (TextView) rootView.findViewById(R.id.itemDetailQuantity);
-            TextView extraView = (TextView) rootView.findViewById(R.id.itemDetailExtra);
-            TextView fullView = (TextView) rootView.findViewById(R.id.itemDetailExtraFull);
+            tvId = (TextView) rootView.findViewById(R.id.itemDetailId);
+            etName = (EditText) rootView.findViewById(R.id.itemDetailName);
+            tvQuantity = (TextView) rootView.findViewById(R.id.itemDetailQuantity);
+            etExtra = (EditText) rootView.findViewById(R.id.itemDetailExtra);
+            tvFull = (TextView) rootView.findViewById(R.id.itemDetailExtraFull);
 
-            CheckBox isMatchCB = (CheckBox) rootView.findViewById(R.id.itemDetailIsMatch);
+            isMatchCB = (CheckBox) rootView.findViewById(R.id.itemDetailIsMatch);
 
-            idView.setText(formatID(_ID));
-            nameView.setText(name);
-            quantityView.setText(quantity.toString());
-            extraView.setText(extra);
+            tvId.setText(formatID(_ID));
+            etName.setText(name);
+            tvQuantity.setText(quantity.toString());
+            etExtra.setText(extra);
             isMatchCB.setChecked(fullMatchesExtra);
-            fullView.setText(full);
+            tvFull.setText(full);
             if (fullMatchesExtra) {
-                fullView.setTextColor(ContextCompat.getColor(getContext(), R.color.grey));
+                tvFull.setTextColor(ContextCompat.getColor(getContext(), R.color.grey));
             } else {
-                fullView.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
+                tvFull.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
             }
         }
 
         private void setButton(View view) {
-            //Setting Name TextField
-            final EditText etName = (EditText) view.findViewById(R.id.itemDetailName);
-            final ImageButton ibName = (ImageButton) view.findViewById(R.id.itemDetailNameEditButton);
-            etName.setInputType(InputType.TYPE_NULL);
-            final EditText etExtra = (EditText) view.findViewById(R.id.itemDetailExtra);
-            final ImageButton ibExtra = (ImageButton) view.findViewById(R.id.itemDetailExtraEditButton);
+            //Prep
             final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            ibName = (ImageButton) view.findViewById(R.id.itemDetailNameEditButton);
+            etName.setInputType(InputType.TYPE_NULL);
+            ibExtra = (ImageButton) view.findViewById(R.id.itemDetailExtraEditButton);
             etExtra.setInputType(InputType.TYPE_NULL);
+            ibQuantity = (ImageButton) view.findViewById(R.id.itemDetailQuantityEditButton);
+
+            //Setting Button to Edit Name TextField
             ibName.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (!nameOnEdit) {
                         if (extraOnEdit) {
                             extraOnEdit = false;
-                            imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
                             etExtra.clearFocus();
-                            etExtra.setBackground(null);
+                            etExtra.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.back_light));
                             etExtra.setInputType(InputType.TYPE_NULL);
+                            etExtra.setTextColor(ContextCompat.getColor(getContext(), R.color.grey));
+                            imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
                             ibExtra.setImageResource(R.drawable.ic_edit_24dp);
                         }
                         etName.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.back));
                         etName.setInputType(InputType.TYPE_CLASS_TEXT);
                         etName.requestFocus();
                         etName.setSelection(etName.getText().length());
+                        etName.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
                         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
                         ibName.setImageResource(R.drawable.ic_done_24dp);
                     } else {
                         etName.clearFocus();
-                        etName.setBackground(null);
+                        etName.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.back_light));
                         etName.setInputType(InputType.TYPE_NULL);
+                        etName.setTextColor(ContextCompat.getColor(getContext(), R.color.grey));
                         imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
                         ibName.setImageResource(R.drawable.ic_edit_24dp);
                     }
@@ -166,35 +191,132 @@ public class ItemDetailActivity extends AppCompatActivity {
                 }
             });
 
-            //Setting Extra TextField
+            //Setting Button to Edit Extra TextField
             ibExtra.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (!extraOnEdit) {
                         if (nameOnEdit) {
                             nameOnEdit = false;
-                            imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
                             etName.clearFocus();
-                            etName.setBackground(null);
+                            etName.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.back_light));
                             etName.setInputType(InputType.TYPE_NULL);
+                            etName.setTextColor(ContextCompat.getColor(getContext(), R.color.grey));
+                            imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
                             ibName.setImageResource(R.drawable.ic_edit_24dp);
                         }
                         etExtra.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.back));
                         etExtra.setInputType(InputType.TYPE_CLASS_TEXT);
                         etExtra.requestFocus();
                         etExtra.setSelection(etExtra.getText().length());
+                        etExtra.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
                         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
                         ibExtra.setImageResource(R.drawable.ic_done_24dp);
                     } else {
                         etExtra.clearFocus();
-                        etExtra.setBackground(null);
+                        etExtra.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.back_light));
                         etExtra.setInputType(InputType.TYPE_NULL);
+                        etExtra.setTextColor(ContextCompat.getColor(getContext(), R.color.grey));
                         imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
                         ibExtra.setImageResource(R.drawable.ic_edit_24dp);
                     }
                     extraOnEdit = !extraOnEdit;
                 }
             });
+
+            //Setting Button to Edit Quantity TextField
+            ibQuantity.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final Dialog d = new Dialog(getContext());
+                    d.setContentView(R.layout.dialog_item_detail);
+                    d.setTitle("NumberPicker");
+                    TextView curQuantity= (TextView) d.findViewById(R.id.itemDetailDialogQuantity);
+                    curQuantity.setText(quantity.toString());
+                    ImageButton cancelButton = (ImageButton) d.findViewById(R.id.itemDetailDialogCancel);
+                    Button removeButton = (Button) d.findViewById(R.id.itemDetailDialogRemove);
+                    Button addButton = (Button) d.findViewById(R.id.itemDetailDialogAdd);
+                    final NumberPicker[] np = new NumberPicker[3];
+                    np[0] = (NumberPicker) d.findViewById(R.id.itemDetailNumberPicker1);
+                    np[1] = (NumberPicker) d.findViewById(R.id.itemDetailNumberPicker2);
+                    np[2] = (NumberPicker) d.findViewById(R.id.itemDetailNumberPicker3);
+                    for (int i = 0; i < 3; i++) {
+                        np[i].setMaxValue(9);
+                        np[i].setMinValue(0);
+                        setDividerColor(np[i], ContextCompat.getColor(getContext(), R.color.colorPrimaryLight));
+                        np[i].setWrapSelectorWheel(false);
+                    }
+                    np[2].setValue(1);
+
+                    cancelButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            d.dismiss();
+                        }
+                    });
+                    removeButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Integer curNpVal = getNumberPickerValue(np);
+                            Log.v("curVal",curNpVal.toString());
+                            if (quantity - curNpVal >= getResources().getInteger(R.integer.item_minimum_quantity)) {
+                                quantity -= curNpVal;
+                                tvQuantity.setText(quantity.toString());
+                                d.dismiss();
+                            } else {
+                                Toast toast = Toast.makeText(getContext(),
+                                        "Item quantity cannot be less than " + getResources().getInteger(R.integer.item_minimum_quantity),
+                                        Toast.LENGTH_SHORT);
+                                toast.show();
+                            }
+                        }
+                    });
+                    addButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Integer curNpVal = getNumberPickerValue(np);
+                            Log.v("curVal",curNpVal.toString());
+                            if(quantity + curNpVal <= getResources().getInteger(R.integer.item_maximum_quantity)) {
+                                quantity += curNpVal;
+                                tvQuantity.setText(quantity.toString());
+                                d.dismiss();
+                            } else {
+                                Toast toast = Toast.makeText(getContext(),
+                                        "Item quantity cannot be more than "+getResources().getInteger(R.integer.item_maximum_quantity),
+                                        Toast.LENGTH_SHORT);
+                                toast.show();
+                            }
+                        }
+                    });
+                    d.show();
+                }
+            });
+        }
+
+        private int getNumberPickerValue(NumberPicker[] picker) {
+            return picker[0].getValue() * 100 + picker[1].getValue() * 10 + picker[2].getValue();
+        }
+
+        private void setDividerColor(NumberPicker picker, int color) {
+
+            java.lang.reflect.Field[] pickerFields = NumberPicker.class.getDeclaredFields();
+            for (java.lang.reflect.Field pf : pickerFields) {
+                if (pf.getName().equals("mSelectionDivider")) {
+                    pf.setAccessible(true);
+                    try {
+                        ColorDrawable colorDrawable = new ColorDrawable(color);
+                        pf.set(picker, colorDrawable);
+                    } catch (IllegalArgumentException e) {
+                        e.printStackTrace();
+                    } catch (Resources.NotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                }
+            }
         }
 
         private String formatID(Integer _ID) {
