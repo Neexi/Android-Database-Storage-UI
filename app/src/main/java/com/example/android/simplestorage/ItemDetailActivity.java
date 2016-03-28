@@ -141,25 +141,23 @@ public class ItemDetailActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     if (!nameOnEdit) {
-                        /**
                         if (extraOnEdit) {
                             extraOnEdit = false;
                             imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+                            etExtra.clearFocus();
                             etExtra.setBackground(null);
-                            etExtra.setFocusable(false);
                             etExtra.setInputType(InputType.TYPE_NULL);
                             ibExtra.setImageResource(R.drawable.ic_edit_24dp);
-                        }**/
+                        }
                         etName.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.back));
                         etName.setInputType(InputType.TYPE_CLASS_TEXT);
                         etName.requestFocus();
-                        etName.setFocusable(true);
                         etName.setSelection(etName.getText().length());
                         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
                         ibName.setImageResource(R.drawable.ic_done_24dp);
                     } else {
+                        etName.clearFocus();
                         etName.setBackground(null);
-                        etName.setFocusable(false);
                         etName.setInputType(InputType.TYPE_NULL);
                         imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
                         ibName.setImageResource(R.drawable.ic_edit_24dp);
@@ -172,26 +170,24 @@ public class ItemDetailActivity extends AppCompatActivity {
             ibExtra.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(!extraOnEdit) {
-                        /**
+                    if (!extraOnEdit) {
                         if (nameOnEdit) {
                             nameOnEdit = false;
                             imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+                            etName.clearFocus();
                             etName.setBackground(null);
-                            etName.setFocusable(false);
                             etName.setInputType(InputType.TYPE_NULL);
                             ibName.setImageResource(R.drawable.ic_edit_24dp);
-                        }**/
+                        }
                         etExtra.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.back));
                         etExtra.setInputType(InputType.TYPE_CLASS_TEXT);
                         etExtra.requestFocus();
-                        etExtra.setFocusable(true);
                         etExtra.setSelection(etExtra.getText().length());
                         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
                         ibExtra.setImageResource(R.drawable.ic_done_24dp);
                     } else {
+                        etExtra.clearFocus();
                         etExtra.setBackground(null);
-                        etExtra.setFocusable(false);
                         etExtra.setInputType(InputType.TYPE_NULL);
                         imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
                         ibExtra.setImageResource(R.drawable.ic_edit_24dp);
