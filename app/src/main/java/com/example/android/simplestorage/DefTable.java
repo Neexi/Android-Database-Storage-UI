@@ -95,6 +95,16 @@ public class DefTable {
         return duplicate;
     }
 
+    public int editEntry(int _ID, String name, int quantity, String extra, boolean fullMatchExtra, String full) {
+        if(elementsList.containsKey(_ID)) {
+            elementsList.remove(_ID);
+            elementsList.put(_ID, new DefTableEntry(_ID, name, quantity, extra, fullMatchExtra, full));
+            return _ID;
+        } else {
+            return -1;
+        }
+    }
+
     /**
      * Find entry from table by the item name
      * @param name

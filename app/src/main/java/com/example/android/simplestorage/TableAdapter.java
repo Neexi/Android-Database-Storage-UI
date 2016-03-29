@@ -36,6 +36,13 @@ public class TableAdapter extends BaseAdapter {
                 getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
+    public void editEntry(Integer itemId, String itemName, Integer itemQuantity, String itemExtra) {
+        int position = getPositionOfId(itemId);
+        this.itemName[position] = itemName;
+        this.itemQuantity[position] = itemQuantity;
+        this.itemExtra[position] = itemExtra;
+    }
+
     @Override
     public int getCount() {
         return itemId.length;
@@ -49,6 +56,10 @@ public class TableAdapter extends BaseAdapter {
     @Override
     public long getItemId(int position) {
         return position;
+    }
+
+    private Integer getPositionOfId(int _ID) {
+        return Arrays.asList(itemId).indexOf(_ID);
     }
 
     private Integer getTableItemId(int position) {
@@ -110,7 +121,7 @@ public class TableAdapter extends BaseAdapter {
                         .putExtra(mtf.getResources().getString(R.string.item_extra), getTableItemExtra(position))
                         .putExtra(mtf.getResources().getString(R.string.item_is_match), String.valueOf(entry.getIsMatch()))
                         .putExtra(mtf.getResources().getString(R.string.item_full), entry.getFull());
-                mtf.startActivity(intent);
+                mtf.startActivityForResult(intent,1);
             }
         });
 

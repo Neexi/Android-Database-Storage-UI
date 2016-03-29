@@ -1,6 +1,7 @@
 package com.example.android.simplestorage;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,6 +17,7 @@ import java.util.Arrays;
  * Created by new on 26/03/2016.
  */
 public class MainTableFragment extends Fragment {
+
     private static DefTable table;
     private static int savedParam = 0;
     private TableAdapter tableAdapter;
@@ -73,6 +75,25 @@ public class MainTableFragment extends Fragment {
 
         // Always call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(savedInstanceState);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if(resultCode == getActivity().RESULT_OK){
+                String idStr = data.getStringExtra(getResources().getString(R.string.item_id));
+                String name = data.getStringExtra(getResources().getString(R.string.item_name));
+                String quantityStr = data.getStringExtra(getResources().getString(R.string.item_quantity));
+                String extra = data.getStringExtra(getResources().getString(R.string.item_extra));
+                String isMatch = data.getStringExtra(getResources().getString(R.string.item_is_match));
+                String full = data.getStringExtra(getResources().getString(R.string.item_full));
+                Log.v("IntentReturn", idStr + ", " + name + ", " + quantityStr + ", " + extra + ", " + isMatch + ", " + full);
+                table.editEntry(Integer.parseInt(idStr), name, Integer.parseInt(quantityStr), extra, Boolean.valueOf(isMatch), full);
+                tableAdapter.editEntry(Integer.parseInt(idStr), name, Integer.parseInt(quantityStr), extra);
+                tableAdapter.notifyDataSetChanged();
+            }
+        }
     }
 
     public DefTable getTable() {
