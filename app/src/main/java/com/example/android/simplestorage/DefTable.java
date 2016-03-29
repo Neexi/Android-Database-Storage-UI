@@ -20,6 +20,10 @@ public class DefTable {
         numElements = 0;
     }
 
+    public Integer getCurrentID() {
+        return currentID;
+    }
+
     /**
      * Add certain number of item into entry based on entry ID
      * @param _ID
@@ -95,8 +99,16 @@ public class DefTable {
         return duplicate;
     }
 
-    public int editEntry(int _ID, String name, int quantity, String extra, boolean fullMatchExtra, String full) {
+    public boolean findEntry(int _ID) {
         if(elementsList.containsKey(_ID)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public int editEntry(int _ID, String name, int quantity, String extra, boolean fullMatchExtra, String full) {
+        if(findEntry(_ID)) {
             elementsList.remove(_ID);
             elementsList.put(_ID, new DefTableEntry(_ID, name, quantity, extra, fullMatchExtra, full));
             return _ID;

@@ -19,33 +19,65 @@ import java.util.Arrays;
  */
 public class TableAdapter extends BaseAdapter {
     MainTableFragment mtf;
-    private Integer[] itemId;
-    private String[] itemName;
-    private Integer[] itemQuantity;
-    private String[] itemExtra;
+    private Integer[] itemIds;
+    private String[] itemNames;
+    private Integer[] itemQuantities;
+    private String[] itemExtras;
     private static LayoutInflater inflater = null;
 
     public TableAdapter(MainTableFragment mtf, Integer[] itemId, String[] itemName, Integer[] itemQuantity, String[] itemExtra) {
         // TODO Auto-generated constructor stub
         this.mtf = mtf;
-        this.itemId = itemId;
-        this.itemName = itemName;
-        this.itemQuantity = itemQuantity;
-        this.itemExtra = itemExtra;
+        this.itemIds = itemId;
+        this.itemNames = itemName;
+        this.itemQuantities = itemQuantity;
+        this.itemExtras = itemExtra;
         inflater = (LayoutInflater) mtf.getContext().
                 getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-    public void editEntry(Integer itemId, String itemName, Integer itemQuantity, String itemExtra) {
+    //TODO : Implement better method
+    public int addEntry(Integer itemId, String itemName, Integer itemQuantity, String itemExtra) {
         int position = getPositionOfId(itemId);
-        this.itemName[position] = itemName;
-        this.itemQuantity[position] = itemQuantity;
-        this.itemExtra[position] = itemExtra;
+        if(position == -1) {
+            int newSize = this.itemIds.length + 1;
+            Integer[] itemIds = new Integer[newSize];
+            String[] itemNames = new String[newSize];
+            Integer[] itemQuantities = new Integer[newSize];
+            String[] itemExtras = new String[newSize];
+            for(int i = 0; i < newSize - 1; i++) {
+                itemIds[i] = this.itemIds[i];
+                itemNames[i] = this.itemNames[i];
+                itemQuantities[i] = this.itemQuantities[i];
+                itemExtras[i] = this.itemExtras[i];
+            }
+            itemIds[newSize - 1] = itemId;
+            itemNames[newSize - 1] = itemName;
+            itemQuantities[newSize - 1] = itemQuantity;
+            itemExtras[newSize - 1] = itemExtra;
+            this.itemIds = itemIds;
+            this.itemNames = itemNames;
+            this.itemQuantities = itemQuantities;
+            this.itemExtras = itemExtras;
+
+            return itemId;
+        }
+        return -1;
+    }
+
+    public int editEntry(Integer itemId, String itemName, Integer itemQuantity, String itemExtra) {
+        int position = getPositionOfId(itemId);
+        if(position != -1) {
+            this.itemNames[position] = itemName;
+            this.itemQuantities[position] = itemQuantity;
+            this.itemExtras[position] = itemExtra;
+        }
+        return position;
     }
 
     @Override
     public int getCount() {
-        return itemId.length;
+        return itemIds.length;
     }
 
     @Override
@@ -59,23 +91,23 @@ public class TableAdapter extends BaseAdapter {
     }
 
     private Integer getPositionOfId(int _ID) {
-        return Arrays.asList(itemId).indexOf(_ID);
+        return Arrays.asList(itemIds).indexOf(_ID);
     }
 
     private Integer getTableItemId(int position) {
-        return itemId[position];
+        return itemIds[position];
     }
 
     private String getTableItemName(int position) {
-        return itemName[position];
+        return itemNames[position];
     }
 
     private Integer getTableItemQuantity(int position) {
-        return itemQuantity[position];
+        return itemQuantities[position];
     }
 
     private String getTableItemExtra(int position) {
-        return itemExtra[position];
+        return itemExtras[position];
     }
 
 
@@ -100,13 +132,13 @@ public class TableAdapter extends BaseAdapter {
         ImageButton ibPlus = (ImageButton) rowView.findViewById(R.id.itemPlus1);
         ImageButton ibMinus = (ImageButton) rowView.findViewById(R.id.itemMinus1);
 
-        if (itemId[position] % 2 == 0) holder.ll.setBackgroundColor(Color.parseColor("#BBDEFB"));
+        if (itemIds[position] % 2 == 0) holder.ll.setBackgroundColor(Color.parseColor("#BBDEFB"));
         else holder.ll.setBackgroundColor(Color.parseColor("#E3F2FD"));
 
-        holder.tvId.setText(itemId[position].toString());
-        holder.tvName.setText(itemName[position]);
-        holder.tvQuantity.setText(itemQuantity[position].toString());
-        holder.tvExtra.setText(itemExtra[position]);
+        holder.tvId.setText(itemIds[position].toString());
+        holder.tvName.setText(itemNames[position]);
+        holder.tvQuantity.setText(itemQuantities[position].toString());
+        holder.tvExtra.setText(itemExtras[position]);
 
         //For Item Detail Page
         rowView.setOnClickListener(new View.OnClickListener() {
@@ -120,7 +152,8 @@ public class TableAdapter extends BaseAdapter {
                         .putExtra(mtf.getResources().getString(R.string.item_quantity), getTableItemQuantity(position).toString())
                         .putExtra(mtf.getResources().getString(R.string.item_extra), getTableItemExtra(position))
                         .putExtra(mtf.getResources().getString(R.string.item_is_match), String.valueOf(entry.getIsMatch()))
-                        .putExtra(mtf.getResources().getString(R.string.item_full), entry.getFull());
+                        .putExtra(mtf.getResources().getString(R.string.item_full), entry.getFull())
+                        .putExtra(mtf.getResources().getString(R.string.item_detail_new), String.valueOf(false));
                 mtf.startActivityForResult(intent,1);
             }
         });
@@ -129,12 +162,12 @@ public class TableAdapter extends BaseAdapter {
         ibPlus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DefTableEntry curEle = mtf.getTable().getEntry(itemId[position]);
+                DefTableEntry curEle = mtf.getTable().getEntry(itemIds[position]);
                 int newQuantity = curEle.addQuantity(1);
                 if (newQuantity != mtf.getResources().getInteger(R.integer.quantity_error)) {
-                    itemQuantity[position] = newQuantity;
+                    itemQuantities[position] = newQuantity;
                     Log.v("Qty", Arrays.toString(mtf.getTable().getQuantityArray()));
-                    holder.tvQuantity.setText(itemQuantity[position].toString());
+                    holder.tvQuantity.setText(itemQuantities[position].toString());
                 }
             }
         });
@@ -143,12 +176,12 @@ public class TableAdapter extends BaseAdapter {
         ibMinus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DefTableEntry curEle = mtf.getTable().getEntry(itemId[position]);
+                DefTableEntry curEle = mtf.getTable().getEntry(itemIds[position]);
                 int newQuantity = curEle.removeQuantity(1);
                 if (newQuantity != mtf.getResources().getInteger(R.integer.quantity_error)) {
-                    itemQuantity[position] = newQuantity;
+                    itemQuantities[position] = newQuantity;
                     Log.v("Qty", Arrays.toString(mtf.getTable().getQuantityArray()));
-                    holder.tvQuantity.setText(itemQuantity[position].toString());
+                    holder.tvQuantity.setText(itemQuantities[position].toString());
                 }
             }
         });

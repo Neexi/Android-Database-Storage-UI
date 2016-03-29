@@ -38,6 +38,7 @@ public class ItemDetailFragment extends Fragment {
     private String extra;
     private String full;
 
+    private boolean isNew;
     private Boolean fullMatchesExtra;
     private Boolean oneOnEdit;
     private Boolean nameOnEdit;
@@ -84,6 +85,7 @@ public class ItemDetailFragment extends Fragment {
         String extra = intent.getStringExtra(getResources().getString(R.string.item_extra));
         String isMatch = intent.getStringExtra(getResources().getString(R.string.item_is_match));
         String full = intent.getStringExtra(getResources().getString(R.string.item_full));
+        String isNewStr = intent.getStringExtra(getResources().getString(R.string.item_detail_new));
         Log.v("IntentExtra", idStr + ", " + name + ", " + quantityStr + ", " + extra + ", " + isMatch + ", " + full);
         this._ID = Integer.parseInt(idStr);
         this.name = name;
@@ -91,6 +93,7 @@ public class ItemDetailFragment extends Fragment {
         this.extra = extra;
         this.full = full;
 
+        this.isNew = Boolean.valueOf(isNewStr);
         this.fullMatchesExtra = Boolean.valueOf(isMatch);
         this.oneOnEdit = false;
         this.nameOnEdit = false;
@@ -108,7 +111,11 @@ public class ItemDetailFragment extends Fragment {
 
         isMatchCB = (CheckBox) rootView.findViewById(R.id.itemDetailIsMatch);
 
-        tvId.setText(formatID(_ID));
+        if(isNew) {
+            tvId.setText(formatID(_ID)+" (New)");
+        } else {
+            tvId.setText(formatID(_ID));
+        }
         etName.setText(name);
         tvQuantity.setText(quantity.toString());
         etExtra.setText(extra);
@@ -262,7 +269,6 @@ public class ItemDetailFragment extends Fragment {
                         np[i].setMaxValue(9);
                         np[i].setMinValue(0);
                         setDividerColor(np[i], ContextCompat.getColor(getContext(), R.color.colorPrimaryLight));
-                        np[i].setWrapSelectorWheel(false);
                     }
                     np[2].setValue(1);
 
@@ -339,15 +345,20 @@ public class ItemDetailFragment extends Fragment {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.putExtra(getResources().getString(R.string.item_id), _ID.toString());
-                intent.putExtra(getResources().getString(R.string.item_name),name);
-                intent.putExtra(getResources().getString(R.string.item_quantity), quantity.toString());
-                intent.putExtra(getResources().getString(R.string.item_extra),extra);
-                intent.putExtra(getResources().getString(R.string.item_full),full);
-                intent.putExtra(getResources().getString(R.string.item_is_match),fullMatchesExtra.toString());
-                getActivity().setResult(getActivity().RESULT_OK, intent);
-                getActivity().finish();
+                if(name.trim().length() > 0) {
+                    Intent intent = new Intent();
+                    intent.putExtra(getResources().getString(R.string.item_id), _ID.toString());
+                    intent.putExtra(getResources().getString(R.string.item_name), name);
+                    intent.putExtra(getResources().getString(R.string.item_quantity), quantity.toString());
+                    intent.putExtra(getResources().getString(R.string.item_extra), extra);
+                    intent.putExtra(getResources().getString(R.string.item_full), full);
+                    intent.putExtra(getResources().getString(R.string.item_is_match), fullMatchesExtra.toString());
+                    getActivity().setResult(getActivity().RESULT_OK, intent);
+                    getActivity().finish();
+                } else {
+                    Toast toast = Toast.makeText(getContext(), "Name must not be empty", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
             }
         });
     }

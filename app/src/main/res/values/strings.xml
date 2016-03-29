@@ -8,6 +8,7 @@
     <string name="item_extra">Extra</string>
     <string name="item_is_match">Is Match</string>
     <string name="item_full">Full</string>
+    <string name="item_detail_new">New Item</string>
     <string name="item_detail_save">Save</string>
     <string name="item_detail_add">Add</string>
     <string name="item_detail_remove">Remove</string>

@@ -2,6 +2,8 @@ package com.example.android.simplestorage;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
@@ -64,6 +66,23 @@ public class MainTableFragment extends Fragment {
 
         ListView itemLv = (ListView) rootView.findViewById(R.id.itemListView);
         itemLv.setAdapter(tableAdapter);
+
+        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), ItemDetailActivity.class)
+                        .putExtra(getResources().getString(R.string.item_id), table.getCurrentID().toString())
+                        .putExtra(getResources().getString(R.string.item_name), "")
+                        .putExtra(getResources().getString(R.string.item_quantity), "0")
+                        .putExtra(getResources().getString(R.string.item_extra), "")
+                        .putExtra(getResources().getString(R.string.item_is_match), String.valueOf(true))
+                        .putExtra(getResources().getString(R.string.item_full), "")
+                        .putExtra(getResources().getString(R.string.item_detail_new), String.valueOf(true));
+                startActivityForResult(intent,1);
+            }
+        });
+
         return rootView;
     }
 
@@ -86,11 +105,19 @@ public class MainTableFragment extends Fragment {
                 String name = data.getStringExtra(getResources().getString(R.string.item_name));
                 String quantityStr = data.getStringExtra(getResources().getString(R.string.item_quantity));
                 String extra = data.getStringExtra(getResources().getString(R.string.item_extra));
-                String isMatch = data.getStringExtra(getResources().getString(R.string.item_is_match));
+                String isMatchStr = data.getStringExtra(getResources().getString(R.string.item_is_match));
                 String full = data.getStringExtra(getResources().getString(R.string.item_full));
-                Log.v("IntentReturn", idStr + ", " + name + ", " + quantityStr + ", " + extra + ", " + isMatch + ", " + full);
-                table.editEntry(Integer.parseInt(idStr), name, Integer.parseInt(quantityStr), extra, Boolean.valueOf(isMatch), full);
-                tableAdapter.editEntry(Integer.parseInt(idStr), name, Integer.parseInt(quantityStr), extra);
+                Log.v("IntentReturn", idStr + ", " + name + ", " + quantityStr + ", " + extra + ", " + isMatchStr + ", " + full);
+                int id = Integer.parseInt(idStr);
+                int quantity = Integer.parseInt(quantityStr);
+                Boolean isMatch = Boolean.valueOf(isMatchStr);
+                if(table.findEntry(id)) {
+                    table.editEntry(id, name, quantity, extra, isMatch, full);
+                    tableAdapter.editEntry(Integer.parseInt(idStr), name, Integer.parseInt(quantityStr), extra);
+                } else {
+                    table.addEntry(name, quantity, extra, isMatch, full);
+                    tableAdapter.addEntry(id, name, quantity, extra);
+                }
                 tableAdapter.notifyDataSetChanged();
             }
         }
