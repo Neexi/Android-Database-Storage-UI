@@ -106,12 +106,56 @@ public class BaseTableProvider extends ContentProvider {
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        return 0;
+        final SQLiteDatabase db = btHelper.getWritableDatabase();
+        final int match = sUriMatcher.match(uri);
+        int rowsDeleted;
+        if ( selection == null ) selection = "1";
+
+        switch (match) {
+            case DEF_ALL_ENTRIES:
+                rowsDeleted = db.delete(BaseTableContract.DefaultTable.TABLE_NAME, selection, selectionArgs);
+                break;
+            case DEF_SINGLE_ENTRY:
+                int entryId = BaseTableContract.DefaultTable.getIdFromUri(uri);
+                selection = BaseTableContract.DefaultTable.TABLE_NAME + "." + BaseTableContract.DefaultTable._ID + " = ?";
+                selectionArgs = new String[]{Integer.toString(entryId)};
+                rowsDeleted = db.delete(BaseTableContract.DefaultTable.TABLE_NAME, selection, selectionArgs);
+                break;
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
+
+        if (rowsDeleted != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+        return rowsDeleted;
     }
 
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        return 0;
+        final SQLiteDatabase db = btHelper.getWritableDatabase();
+        final int match = sUriMatcher.match(uri);
+        int rowsUpdated;
+
+        switch (match) {
+            case DEF_ALL_ENTRIES:
+                rowsUpdated = db.update(BaseTableContract.DefaultTable.TABLE_NAME, values, selection, selectionArgs);
+                break;
+            case DEF_SINGLE_ENTRY:
+                int entryId = BaseTableContract.DefaultTable.getIdFromUri(uri);
+                selection = BaseTableContract.DefaultTable.TABLE_NAME + "." + BaseTableContract.DefaultTable._ID + " = ?";
+                selectionArgs = new String[]{Integer.toString(entryId)};
+                rowsUpdated = db.update(BaseTableContract.DefaultTable.TABLE_NAME, values, selection, selectionArgs);
+                break;
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
+
+        if (rowsUpdated != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+        return rowsUpdated;
+
     }
 
     static UriMatcher buildUriMatcher() {
@@ -120,7 +164,7 @@ public class BaseTableProvider extends ContentProvider {
 
         // For each type of URI you want to add, create a corresponding code.
         matcher.addURI(authority, BaseTableContract.PATH_DEFAULT, DEF_ALL_ENTRIES);
-        matcher.addURI(authority, BaseTableContract.PATH_DEFAULT + "/*", DEF_SINGLE_ENTRY);
+        matcher.addURI(authority, BaseTableContract.PATH_DEFAULT + "/#", DEF_SINGLE_ENTRY);
         return matcher;
     }
 }
