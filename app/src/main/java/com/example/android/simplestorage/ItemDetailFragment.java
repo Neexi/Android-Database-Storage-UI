@@ -121,11 +121,6 @@ public class ItemDetailFragment extends Fragment {
         etExtra.setText(extra);
         isMatchCB.setChecked(fullMatchesExtra);
         etFull.setText(full);
-        if (fullMatchesExtra) {
-            etFull.setTextColor(ContextCompat.getColor(getContext(), R.color.grey));
-        } else {
-            etFull.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
-        }
     }
 
     private void setButton(View view) {

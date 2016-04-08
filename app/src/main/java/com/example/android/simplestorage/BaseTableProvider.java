@@ -22,7 +22,7 @@ public class BaseTableProvider extends ContentProvider {
     @Override
     public boolean onCreate() {
         btHelper = new BaseTableHelper(getContext());
-        return false;
+        return true;
     }
 
     @Nullable
@@ -33,7 +33,7 @@ public class BaseTableProvider extends ContentProvider {
             case DEF_ALL_ENTRIES:
             {
                 retCursor = btHelper.getReadableDatabase().query(
-                        BaseTableContract.DefaultTable.TABLE_NAME,
+                        BaseTableContract.DefTable.TABLE_NAME,
                         projection,
                         selection,
                         selectionArgs,
@@ -45,11 +45,11 @@ public class BaseTableProvider extends ContentProvider {
             }
             case DEF_SINGLE_ENTRY:
             {
-                int entryId = BaseTableContract.DefaultTable.getIdFromUri(uri);
-                selection = BaseTableContract.DefaultTable.TABLE_NAME + "." + BaseTableContract.DefaultTable._ID + " = ?";
+                int entryId = BaseTableContract.DefTable.getIdFromUri(uri);
+                selection = BaseTableContract.DefTable.TABLE_NAME + "." + BaseTableContract.DefTable._ID + " = ?";
                 selectionArgs = new String[]{Integer.toString(entryId)};
                 retCursor = btHelper.getReadableDatabase().query(
-                        BaseTableContract.DefaultTable.TABLE_NAME,
+                        BaseTableContract.DefTable.TABLE_NAME,
                         projection,
                         selection,
                         selectionArgs,
@@ -74,9 +74,9 @@ public class BaseTableProvider extends ContentProvider {
         switch (match) {
             // Student: Uncomment and fill out these two cases
             case DEF_ALL_ENTRIES:
-                return BaseTableContract.DefaultTable.CONTENT_TYPE;
+                return BaseTableContract.DefTable.CONTENT_TYPE;
             case DEF_SINGLE_ENTRY:
-                return BaseTableContract.DefaultTable.CONTENT_ITEM_TYPE;
+                return BaseTableContract.DefTable.CONTENT_ITEM_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -91,9 +91,9 @@ public class BaseTableProvider extends ContentProvider {
 
         switch (match) {
             case DEF_ALL_ENTRIES:
-                long _id = db.insert(BaseTableContract.DefaultTable.TABLE_NAME, null, values);
+                long _id = db.insert(BaseTableContract.DefTable.TABLE_NAME, null, values);
                 if ( _id > 0 )
-                    returnUri = BaseTableContract.DefaultTable.buildDefaultUri(_id);
+                    returnUri = BaseTableContract.DefTable.buildDefaultUri(_id);
                 else
                     throw new android.database.SQLException("Failed to insert row into " + uri);
                 break;
@@ -113,13 +113,13 @@ public class BaseTableProvider extends ContentProvider {
 
         switch (match) {
             case DEF_ALL_ENTRIES:
-                rowsDeleted = db.delete(BaseTableContract.DefaultTable.TABLE_NAME, selection, selectionArgs);
+                rowsDeleted = db.delete(BaseTableContract.DefTable.TABLE_NAME, selection, selectionArgs);
                 break;
             case DEF_SINGLE_ENTRY:
-                int entryId = BaseTableContract.DefaultTable.getIdFromUri(uri);
-                selection = BaseTableContract.DefaultTable.TABLE_NAME + "." + BaseTableContract.DefaultTable._ID + " = ?";
+                int entryId = BaseTableContract.DefTable.getIdFromUri(uri);
+                selection = BaseTableContract.DefTable.TABLE_NAME + "." + BaseTableContract.DefTable._ID + " = ?";
                 selectionArgs = new String[]{Integer.toString(entryId)};
-                rowsDeleted = db.delete(BaseTableContract.DefaultTable.TABLE_NAME, selection, selectionArgs);
+                rowsDeleted = db.delete(BaseTableContract.DefTable.TABLE_NAME, selection, selectionArgs);
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -139,13 +139,13 @@ public class BaseTableProvider extends ContentProvider {
 
         switch (match) {
             case DEF_ALL_ENTRIES:
-                rowsUpdated = db.update(BaseTableContract.DefaultTable.TABLE_NAME, values, selection, selectionArgs);
+                rowsUpdated = db.update(BaseTableContract.DefTable.TABLE_NAME, values, selection, selectionArgs);
                 break;
             case DEF_SINGLE_ENTRY:
-                int entryId = BaseTableContract.DefaultTable.getIdFromUri(uri);
-                selection = BaseTableContract.DefaultTable.TABLE_NAME + "." + BaseTableContract.DefaultTable._ID + " = ?";
+                int entryId = BaseTableContract.DefTable.getIdFromUri(uri);
+                selection = BaseTableContract.DefTable.TABLE_NAME + "." + BaseTableContract.DefTable._ID + " = ?";
                 selectionArgs = new String[]{Integer.toString(entryId)};
-                rowsUpdated = db.update(BaseTableContract.DefaultTable.TABLE_NAME, values, selection, selectionArgs);
+                rowsUpdated = db.update(BaseTableContract.DefTable.TABLE_NAME, values, selection, selectionArgs);
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -156,6 +156,32 @@ public class BaseTableProvider extends ContentProvider {
         }
         return rowsUpdated;
 
+    }
+
+    @Override
+    public int bulkInsert(Uri uri, ContentValues[] values) {
+        final SQLiteDatabase db = btHelper.getWritableDatabase();
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case DEF_ALL_ENTRIES:
+                db.beginTransaction();
+                int returnCount = 0;
+                try {
+                    for (ContentValues value : values) {
+                        long _id = db.insert(BaseTableContract.DefTable.TABLE_NAME, null, value);
+                        if (_id != -1) {
+                            returnCount++;
+                        }
+                    }
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+                getContext().getContentResolver().notifyChange(uri, null);
+                return returnCount;
+            default:
+                return super.bulkInsert(uri, values);
+        }
     }
 
     static UriMatcher buildUriMatcher() {

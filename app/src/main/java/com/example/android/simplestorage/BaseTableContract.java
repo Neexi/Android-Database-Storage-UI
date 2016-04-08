@@ -17,7 +17,7 @@ public final class BaseTableContract {
 
     }
 
-    public static abstract class DefaultTable implements BaseColumns {
+    public static abstract class DefTable implements BaseColumns {
         public static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_DEFAULT).build();
 
@@ -25,7 +25,7 @@ public final class BaseTableContract {
                 ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_DEFAULT;
         public static final String CONTENT_ITEM_TYPE =
                 ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_DEFAULT;
-        public static final String TABLE_NAME = "default";
+        public static final String TABLE_NAME = "deftable";
         public static final String COLUMN_ITEM_NAME = "name";
         public static final String COLUMN_ITEM_QUANTITY = "quantity";
         public static final String COLUMN_ITEM_EXTRA = "extra";
